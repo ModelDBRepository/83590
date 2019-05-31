@@ -1,0 +1,70 @@
+//
+// This NEURON simulation aims at replicating Figure 4A of the Arsiero et al., 2007 - submitted.
+// Refer to: Arsiero, M., Luescher, H.-R., Lundstrom, B.N., and Giugliano, M. (2007). The Impact of Input Fluctuations on the Frequency-Current Relationships of Layer 5 Pyramidal Neurons in the Rat Medial Prefrontal Cortex. sumbitted.
+//
+
+//-------------------------------------------------------------------------------------------------------//
+load_file("nrngui.hoc")                     // Loading of the standard GUI controls...
+load_file("mylibs/graphs.hoc")              // Loading some ad-hoc proc for displaying live traces...
+load_file("mylibs/singlecompneuron_1.hoc")  // Loading model neuron (morphology, biophysics, etc)...
+load_file("mylibs/myinit.hoc")              // Loading some ad-hoc proc for file creation and initialization...
+load_file("mylibs/TFparams.hoc")            // Settings for the TF...
+//-------------------------------------------------------------------------------------------------------//
+
+a_hhin    = 1.                 // a == 1, slow inactivation included, a == 0 excluded
+
+
+tstart = 0.                   // ms - just for the purpouse of 'addgraph'
+tstop  = Tdelay + T1 + T      // ms - just for the purpouse of 'addgraph' 
+  
+access soma
+
+//
+// Displaying live trace is of course slowing down the simulation, so commenting the following
+// line could be useful..
+//
+
+addgraph("soma.v(0.5)",-80,40)
+
+ccc = 1
+for (mu = mustart; mu <= mustop; mu = mu + mustep) {
+ TF_file.printf("%f\t ", mu)
+ N     = 0
+
+ for (sigma = sigmastart; sigma <= sigmastop; sigma = sigma + sigmastep){
+  fl.m   = 0.           // During the first Tdelay [ms] - no stimulation takes place.
+  fl.s   = 0.           // During the first Tdelay [ms] - no stimulation takes place.
+  apc.n  = 0            // The spike counter is reset to 0.
+  t      = 0.           // ms - The current simulation time is set to 0.
+  tstart = 0.           // ms
+  tstop  = Tdelay       // ms
+  finitialize(-65)
+  run()
+
+  fl.m   = mu           //
+  fl.s   = sigma        //
+  tstop  = t + T1       // ms - We advance the simulation of T1, while stimulating..
+  continuerun(tstop)
+  
+  apc.n  = 0            // We discard the count of the spikes emitted during the previous interval..
+  tstop  = t + T        // ms - We advance the simulation of T, during which we count the spikes..
+  continuerun(tstop)
+  N      = apc.n        // N spikes have been counted.
+
+  TF_file.printf( "%f\t ", 1000. * N / T )      // The firing rate is computed and written on disk - measured in Hz
+
+  printf("%d/%d points  done!\n", ccc, numpoints  )
+ 
+  ccc = ccc +1
+ }//end for sigma
+ 
+ TF_file.printf("\n")
+ TF_file.flush()
+
+} //end for mu
+
+TF_file.close()
+
+printf("The data points of the f-I response function are now available for further analysis and plot!\n")
+printf("The data points of the f-I response function are now available for further analysis and plot!\n")
+

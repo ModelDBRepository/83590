@@ -1,0 +1,27 @@
+//
+// Refer to: Arsiero, M., Luescher, H.-R., Lundstrom, B.N., and Giugliano, M. (2007). The Impact of Input Fluctuations on the Frequency-Current Relationships of Layer 5 Pyramidal Neurons in the Rat Medial Prefrontal Cortex. sumbitted.
+//
+
+create soma
+access soma
+
+//
+// Let's define a single-compartmental model, implementing Hodgkin-Huxley equations (but refer to mechanisms/hhin.mod)
+//
+
+soma {             
+       L       = 35.6825      // um - This choice is to get S = 0.004 mm^2 
+       diam    = 35.6825      // um - This choice is to get S = 0.004 mm^2
+       
+       nseg    = 1            // single compartment, one segment is considered
+       celsius = 6.3          // temperature value, affecting channel kinetics (refer to Hodgkin & Huxley, 1952)
+
+       cm      = 1.           // uF/cm^2 - capacitance of the membrane.
+       insert hhin            // insert active and passive currents INa, IKd, Ileak (refer to mechanisms/hhin.mod)
+
+       ena       = 50         // mV - reversal potential for sodium currents.
+       ek        = -77        // mV - reversal potential for potassium currents.
+
+       a_hhin    = 1.         // a == 1, slow inactivation included, a == 0 excluded
+}   
+

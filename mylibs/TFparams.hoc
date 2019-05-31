@@ -1,0 +1,36 @@
+//
+// Parameters of the simulated experiments, where a fluctuating current is injected into a HH neuron
+// with appropriate values for mean and variance of such current. These values are then swept within some range.
+//
+// Refer to: Arsiero, M., Luescher, H.-R., Lundstrom, B.N., and Giugliano, M. (2007). The Impact of Input Fluctuations on the Frequency-Current Relationships of Layer 5 Pyramidal Neurons in the Rat Medial Prefrontal Cortex. sumbitted.
+//
+
+  mustart  = -0.400      //uA
+  mustop   = 0.800       //uA
+  mustep   = 0.050        //uA
+
+  sigmastart  = 0.064     //uA
+  sigmastop   = 0.128    //uA
+  sigmastep   = 0.032     //pA
+
+  
+  Tdelay = 100.        // Wait for the voltage & state vars to relax at time t = 0
+  T1     = 500.        // The stimulation last (T1 + T), but during T1 no spike is counted
+  T      = 5500.       // so that the mean firing rate is computed at the steady-state.
+  dt     = 0.025       // ms - integration time step
+
+  //
+  // "numpoints" is just a way to know in advance how many current injection are expected given the
+  // user choice of the range [mustart ; mustop] and [sigmastart ; sigmastop].
+  //
+  
+  numpoints = ((mustop - mustart)/mustep + 1) * ((sigmastop - sigmastart)/sigmastep + 1)
+
+  //
+  // This writes on disk the values of standard deviations (i.e. sigma) used.
+  //
+  
+  for (sigma = sigmastart; sigma <= sigmastop; sigma = sigma + sigmastep) {
+   notesTF_file.printf("%f\t ", sigma)
+  }
+  notesTF_file.close()

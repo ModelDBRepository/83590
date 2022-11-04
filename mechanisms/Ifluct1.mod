@@ -60,7 +60,6 @@ INDEPENDENT {t FROM 0 TO 1 WITH 1 (ms)}
 NEURON {
     POINT_PROCESS Ifluct1
     RANGE m, s, tau, x
-    RANGE new_seed
     NONSPECIFIC_CURRENT i
 }
 

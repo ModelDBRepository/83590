@@ -73,15 +73,23 @@ Giugliano (mgiugliano@gmail.com)
 
 Under unix systems:
 ===================
-to compile the mod files use the command 
-nrnivmodl 
-and run the simulation hoc file with the command 
+to compile the mod files use the command
+nrnivmodl
+and run the simulation hoc file with the command
 nrngui runme.hoc
 
 Under Windows:
 ==============
-to compile the mod files use the "mknrndll DOS box" and 
+to compile the mod files use the "mknrndll DOS box" and
 follow on-screen instructions.
 A double click on the simulation file
-runme.hoc 
+runme.hoc
 will open the simulation window.
+
+
+Changelog
+=========
+
+* 20220924: Update MOD files to avoid declaring variables and functions with the same name.
+  See https://github.com/neuronsimulator/nrn/pull/1992
+
